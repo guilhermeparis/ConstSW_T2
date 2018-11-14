@@ -50,6 +50,5 @@ public abstract class TableObject {
 	public void setRelations(ArrayList<TableObject> relations) {
 		this.relations = relations;
 	}
-	
-	
+		
 }
