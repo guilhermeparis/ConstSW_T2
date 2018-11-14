@@ -74,7 +74,7 @@ public abstract class SqlConnection implements DatabaseConnection {
 	@Override
 	public boolean updateObject(TableObject obj, int id) throws SQLException {
 
-		String sql = "UPDATE CARRO SET " + obj.convertToDict().toString().replace("{", "").replace("}", "")
+		String sql = "UPDATE " + obj.getClass().getSimpleName() + " SET " + obj.convertToDict().toString().replace("{", "").replace("}", "")
 				+ " WHERE ID = " + id + ";";
 
 		Statement stmt;
