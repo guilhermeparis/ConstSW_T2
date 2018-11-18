@@ -15,7 +15,7 @@ public class MainJFrame extends JFrame {
    */
   public MainJFrame(List<TableObject> tables, SqlConnection connection) {
 
-    this.setTitle("CRUD dos guri");
+    this.setTitle("Sistema de Locações");
 
     this.setSize(600, 200);
     

@@ -7,13 +7,17 @@ import framework.TableObject;
 
 public class Cliente extends TableObject {
 
-	private String cpf;
-	private String nome;
+	String cpf;
+	String nome;
+	int locacao_id;
 	
-	public Cliente(String cpf, String nome) {
+	public Cliente(String cpf, String nome, int locacao_id) {
 		super();
 		this.cpf = cpf;
 		this.nome = nome;
+		
+		primaryKey.add("id");
+		relations.add(new Locacao(id, 0, "", "", 0.0));
 	}
 
 	@Override
@@ -29,6 +33,7 @@ public class Cliente extends TableObject {
 		obj.put("id", id);
 		obj.put("cpf", cpf);
 		obj.put("nome", nome);
+		
 		return obj;
 	}
 
@@ -47,5 +52,12 @@ public class Cliente extends TableObject {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
+
+	public int getLocacao_id() {
+		return locacao_id;
+	}
+
+	public void setLocacao_id(int locacao_id) {
+		this.locacao_id = locacao_id;
+	}
 }

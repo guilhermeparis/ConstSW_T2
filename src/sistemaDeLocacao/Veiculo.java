@@ -7,17 +7,21 @@ import framework.TableObject;
 
 public class Veiculo extends TableObject {
 
-	private String renavam;
-	private String marca;
-	private String modelo;
-	private double valorDiaria;
+	String renavam;
+	String marca;
+	String modelo;
+	double valorDiaria;
+	int locacao_id; 
 	
-	public Veiculo(String renavam, String marca, String modelo, double valorDiaria) {
+	public Veiculo(String renavam, String marca, String modelo, double valorDiaria, int locacao_id) {
 		super();
 		this.renavam = renavam;
 		this.marca = marca;
 		this.modelo = modelo;
 		this.valorDiaria = valorDiaria;
+		
+		primaryKey.add("id");
+		relations.add(new Locacao(0, id, "","", 0.0));
 	}
 
 	@Override
@@ -37,6 +41,7 @@ public class Veiculo extends TableObject {
 		obj.put("marca", marca);
 		obj.put("modelo", modelo);
 		obj.put("valorDiaria", valorDiaria);
+
 		return obj;
 	}
 	
@@ -68,8 +73,16 @@ public class Veiculo extends TableObject {
 		return valorDiaria;
 	}
 
-	public void setValor_diaria(double valorDiaria) {
+	public void setValorDiaria(double valorDiaria) {
 		this.valorDiaria = valorDiaria;
+	}
+
+	public int getLocacao_id() {
+		return locacao_id;
+	}
+
+	public void setLocacao_id(int locacao_id) {
+		this.locacao_id = locacao_id;
 	}
 	
 }

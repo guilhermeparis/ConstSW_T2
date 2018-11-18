@@ -17,15 +17,16 @@ public class Main {
 		
 		teste.createConnection();
 		
-		
 		//Dodos de exemplo
-		Veiculo veiculo = new Veiculo("RenavamTeste", "MarcaTeste", "ModeloTeste", 100.05);		
-		Cliente cliente = new Cliente("CPFExemplo", "NomeExemplo");
+		Veiculo veiculo = new Veiculo("RenavamTeste", "MarcaTeste", "ModeloTeste", 100.05, 0);		
+		Cliente cliente = new Cliente("CPFExemplo", "NomeExemplo", 0);
+		Locacao locacao = new Locacao(0, 0, "", "", 0.0);
 		
 		List<TableObject> tables = new ArrayList<>();		
 
 		tables.add(veiculo);
 		tables.add(cliente);
+		tables.add(locacao);
 		
 		new CrudFramework(tables, teste);
 
