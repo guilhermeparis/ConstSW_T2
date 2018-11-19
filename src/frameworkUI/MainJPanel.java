@@ -15,22 +15,24 @@ import framework.TableObject;
 import javax.swing.JComboBox;
 import framework.SqlConnection;;
 
-public class MainJPanel  extends JPanel implements ActionListener {
-  /**
-   * Componente de label
-   */
+public class MainJPanel extends JPanel implements ActionListener {
+  
+  //Componente de label
+   
   private JComboBox<String> combobox;
   private JButton createButton;
   private JButton readButton;
+  private JButton listAllButton;
   private JButton updateButton;
   private JButton deleteButton;
   private List<TableObject> tables;
   private SqlConnection connection;
   
   public MainJPanel(List<TableObject> tables, SqlConnection connection)  {
-    //Instancia um novo label e um novo bot√£o
+    //Instancia um novo label e um novo bot„o
     createButton = new JButton("Create");
     readButton = new JButton("Read");
+    listAllButton = new JButton("List All");
     updateButton = new JButton("Update");
     deleteButton = new JButton("Delete");
     combobox = new JComboBox<>();
@@ -38,8 +40,7 @@ public class MainJPanel  extends JPanel implements ActionListener {
     this.connection = connection;
        
     
-    //seta os limites dos componentes
-    
+    //Configura os limites dos componentes    
     for (TableObject table : this.tables) {
     		combobox.addItem(table.getClass().getSimpleName());
     }
@@ -48,19 +49,19 @@ public class MainJPanel  extends JPanel implements ActionListener {
     this.add(this.combobox);
     this.add(this.createButton);
     this.add(this.readButton);
+    this.add(this.listAllButton);
     this.add(this.updateButton);
     this.add(this.deleteButton);
     
-    //adiciona ao um bot√£o um "escutador", respons√°vel por tratar seus cliques.
+    //Adiciona um listener ao bot„o que ser· respons·vel por tratar seus cliques.
     this.createButton.addActionListener(this);
     this.readButton.addActionListener(this);
+    this.listAllButton.addActionListener(this);
     this.updateButton.addActionListener(this);
     this.deleteButton.addActionListener(this);
   }
 
-  /**
-   * M√©todo que trata quando uma a√ß√£o √© executada 
-   */
+  //MÈtodo que trata quando uma aÁ„o È executada
   public void actionPerformed(ActionEvent e)  {
 	  //Pega o objeto selecionado no combobox
 	  String selectedTableName = (String) combobox.getSelectedItem();
@@ -73,19 +74,19 @@ public class MainJPanel  extends JPanel implements ActionListener {
   		}
 	  }
 	  
-	  
-    //Verifica qual bot√£o foi acionado
+    //Verifica qual bot„o foi acionado
     if (e.getSource()==this.createButton) {
     		new CrudOperationJFrame(CrudOperation.Create, selectedObject, connection);
     } else if (e.getSource()==this.readButton) {
     		new CrudOperationJFrame(CrudOperation.Read, selectedObject, connection);
+    } else if (e.getSource()==this.listAllButton) {
+    		new MainJTable();
     } else if (e.getSource()==this.updateButton) {
     		new CrudOperationJFrame(CrudOperation.Update, selectedObject, connection);
     } else if (e.getSource()==this.deleteButton){
     		new CrudOperationJFrame(CrudOperation.Delete, selectedObject, connection);
     }  
        
-    
   }
 
 }

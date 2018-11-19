@@ -5,8 +5,6 @@ import framework.SqlConnection;
 import javax.swing.*;
 import java.awt.event.*;
 
-
-
 public class CrudOperationJFrame extends JFrame {
 	
   public CrudOperationJFrame(CrudOperation operation, TableObject object, SqlConnection connection) {

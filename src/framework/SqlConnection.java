@@ -23,29 +23,25 @@ public abstract class SqlConnection implements DatabaseConnection {
 	@Override
 	public boolean createObject(TableObject obj) throws SQLException {
 
-		String sql = "INSERT INTO " + obj.getClass().getSimpleName() + " ("
-				+ obj.convertToDict().keySet().toString().replace("[", "").replace("]", "") + ")" + " values ("
-				+ obj.convertToDict().values().toString().replace("[", "").replace("]", "") + ");";
+		String sql = "INSERT INTO " + obj.getClass().getSimpleName() + " (" + obj.convertToDict().keySet().toString().replace("[", "").replace("]", "") + ")"
+				+" VALUES ("+ obj.convertToDict().values().toString().replace("[", "").replace("]", "") + ");";
 
 		Statement stmt;
-
 		System.out.println(sql);
-
 		stmt = conn.createStatement();
 		stmt.execute(sql);
 		
 		return true;
-
 	}
 
 	@Override
 	public TableObject readObject(TableObject table, int id) throws SQLException {
 
-		String sql = "SELECT * from " + table.getClass().getSimpleName() + " where id = " + id + ";";
+		String sql = "SELECT * FROM " + table.getClass().getSimpleName()
+				+ " WHERE ID = " + id + ";";
 
 		Statement stmt;
 		ResultSetMetaData rsmd;
-
 		ResultSet result;
 
 		stmt = conn.createStatement();
@@ -57,11 +53,8 @@ public abstract class SqlConnection implements DatabaseConnection {
 		Map<String, Object> dict = new HashMap<String, Object>();
 
 		while (result.next()) {
-
 			for (int i = 1; i <= rsmd.getColumnCount(); ++i) {
-
 				dict.put(rsmd.getColumnName(i), result.getObject(i));
-
 			}
 		}
 
@@ -70,23 +63,25 @@ public abstract class SqlConnection implements DatabaseConnection {
 		return table;
 
 	}
+	
+	public boolean listAllObjects() throws SQLException {
+		
+		return true;
+	}
 
 	@Override
 	public boolean updateObject(TableObject obj, int id) throws SQLException {
 
-		String sql = "UPDATE " + obj.getClass().getSimpleName() + " SET " + obj.convertToDict().toString().replace("{", "").replace("}", "")
+		String sql = "UPDATE " + obj.getClass().getSimpleName()
+				+ " SET " + obj.convertToDict().toString().replace("{", "").replace("}", "")
 				+ " WHERE ID = " + id + ";";
 
 		Statement stmt;
-
 		System.out.println(sql);
-
 		stmt = conn.createStatement();
 		stmt.execute(sql);
 		
-
 		return true;
-
 	}
 
 	@Override
@@ -95,14 +90,10 @@ public abstract class SqlConnection implements DatabaseConnection {
 		String sql = "DELETE FROM " + obj.getClass().getSimpleName() + " WHERE ID = " + obj.getId() + ";";
 
 		System.out.println(sql);
-
 		Statement stmt;
-
-		
 		stmt = conn.createStatement();
 		stmt.execute(sql);
 		
-	
 		return true;
 	}
 
@@ -111,6 +102,7 @@ public abstract class SqlConnection implements DatabaseConnection {
 		//Verifica se a tabela já existe		
 		String sql1 = "SELECT * FROM Intermediary" + obj.getClass().getSimpleName() + obj2.getClass().getSimpleName();
 		Statement stmt;
+		
 		try {
 			stmt = conn.createStatement();
 			stmt.execute(sql1);
@@ -132,16 +124,16 @@ public abstract class SqlConnection implements DatabaseConnection {
 		try {
 			stmt = conn.createStatement();
 			stmt.execute(sql);
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
+		
 		return true;
-
 	}
 	
-
 	public boolean insertRelation(TableObject obj, TableObject obj2) {
 
 		String sql = "INSERT INTO Intermediary" + obj.getClass().getSimpleName() + obj2.getClass().getSimpleName()
@@ -153,12 +145,14 @@ public abstract class SqlConnection implements DatabaseConnection {
 		try {
 			stmt = conn.createStatement();
 			stmt.execute(sql);
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
+		
 		return true;
 	}
-
+	
 }
