@@ -2,10 +2,14 @@ package frameworkUI;
 
 import framework.TableObject;
 import framework.SqlConnection;
+
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -13,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
 //Esta classe cria uma janela para realizar as operações CRUD de cada Classe.
@@ -35,60 +40,93 @@ public class CrudOperationJPanel extends JPanel implements ActionListener {
 		this.object = object;
 
 		Map<String, Object> dicObject = object.convertToDict();
-
-		//Esta variável controla a posição dos objetos no painel.
-		int yPosition = 10;
-
-		//Esta função pega informaçoes, constrói caixas de texto e labels e as insere no painel da operação.
-		for (Map.Entry<String, Object> entry : dicObject.entrySet()) {
-			String key = entry.getKey();
-			JTextField textField = new JTextField(); //Caixa de texto
-			JLabel label = new JLabel(key.substring(0, 1).toUpperCase() + key.substring(1)); //Label da caixa de texto
-
-			label.setToolTipText(dicObject.get(key).getClass().getSimpleName()); //Label da Caixa de Texto recebe Simple Name do dicionário.
+		
+		if(operation == CrudOperation.ListAll) {
 			
-			//Se o botão é de uma Primary Key, adiciona esta mensagem a Tooltip à esquerda da caixa de texto. 
-			if(object.getPrimaryKey().contains(key))
-				label.setToolTipText(label.getToolTipText() + " - Primary Key ");
-
-			//Se o botão é de uma Foreign Key, adiciona esta mensagem a Tooltip à esquerda da caixa de texto.
-			if(object.getForeignKey().keySet().contains(key))
-				label.setToolTipText(label.getToolTipText() + "- Foreign Key: Class:" + object.getForeignKey().keySet() 
-						+ " Column: " + object.getForeignKey().values());
-
-			//- - - - -
-			//Posições da Caixa de Texto e da Label na janela de operação. 
-			textField.setBounds(250, yPosition, 100, 30);
-			label.setBounds(100, yPosition, 120, 30);
-			//- - - - -
+			ArrayList<String> columnNames = new ArrayList<String>();
+			ArrayList<String> row = new ArrayList<String>();
+			Object[][] rowData;
 			
-			//Obteve as informações para construir uma caixa de texto e um label para esta caixa.
-			//Agora adiciona a caixa e a label dentro do painel.
-			this.textFields.put(key, textField);
-			this.add(textField);
-			this.add(label);
-			 
-			if ((operation != CrudOperation.Create && operation != CrudOperation.Update) && key != "id") {
-				textField.hide();
+			for (Map.Entry<String, Object> entry : dicObject.entrySet()) {
+				String key = entry.getKey();
+				JTable table; //Tabela
+				
+				JLabel label = new JLabel(key.substring(0, 1).toUpperCase() + key.substring(1)); //Nome da Coluna
+				label.setToolTipText(dicObject.get(key).getClass().getSimpleName()); //Label recebe Simple Name do dicionário.
+				
+				//Se a coluna é de uma Primary Key, adiciona a informação à coluna.
+				if(object.getPrimaryKey().contains(key)) {
+					label.setToolTipText(label.getToolTipText() + "(PK)");
+				}
+
+				//Se a coluna é de uma Foreign Key, adiciona esta mensagem a Tooltip à esquerda da caixa de texto.
+				if(object.getForeignKey().keySet().contains(key)) {
+					label.setToolTipText(label.getToolTipText() + "(FK: " + object.getForeignKey().keySet() + ")");
+				}
+				
+				columnNames.add(label.toString());
+				row.add(key.toString());
+				//rowData.add(row);
+				
+				//Agora adiciona a caixa e a label dentro do painel.
 			}
 			
-			yPosition = yPosition + 50;
+			//table = new JTable(columnNames, rowData);
 		}
-
-		//Adicionadas caixas de texto e labels da classe, o botão referente à operação é adicionado à janela.
-		mainButton.setBounds(250, yPosition, 100, 30);
-		this.add(mainButton);
-		this.mainButton.addActionListener(this);//Adiciona um listener para o botão - ao clicar no botão executará tal função (especificada abaixo).   
-
-		//Se a operação é UPDATE, adiciona à janela um segundo botão chamado GET.
-		if(operation == CrudOperation.Update) {
-			secondaryButton = new JButton("Get");
-			secondaryButton.setBounds(100, yPosition, 80, 30);
-			this.add(secondaryButton);
-			this.secondaryButton.addActionListener(this);
-			this.mainButton.setEnabled(false);
+		
+		else {
+		
+			//Esta variável controla a posição dos objetos no painel.
+			int yPosition = 10;
+	
+			//Esta função pega informaçoes, constrói caixas de texto e labels e as insere no painel da operação.
+			for (Map.Entry<String, Object> entry : dicObject.entrySet()) {
+				String key = entry.getKey();
+				JTextField textField = new JTextField(); //Caixa de texto
+				JLabel label = new JLabel(key.substring(0, 1).toUpperCase() + key.substring(1)); //Label da caixa de texto
+	
+				label.setToolTipText(dicObject.get(key).getClass().getSimpleName()); //Label da Caixa de Texto recebe Simple Name do dicionário.
+				
+				//Se o botão é de uma Primary Key, adiciona esta mensagem a Tooltip à esquerda da caixa de texto. 
+				if(object.getPrimaryKey().contains(key)) {
+					label.setToolTipText(label.getToolTipText() + " - Primary Key ");
+				}
+	
+				//Se o botão é de uma Foreign Key, adiciona esta mensagem a Tooltip à esquerda da caixa de texto.
+				if(object.getForeignKey().keySet().contains(key)) {
+					label.setToolTipText(label.getToolTipText() + "- Foreign Key: Class:" + object.getForeignKey().keySet()	+ " Column: " + object.getForeignKey().values());
+				}
+	
+				//Posições da Caixa de Texto e da Label na janela de operação. 
+				textField.setBounds(250, yPosition, 100, 30);
+				label.setBounds(100, yPosition, 120, 30);
+				
+				//Obteve as informações para construir uma caixa de texto e um label para esta caixa. Já pode adicionar a caixa e a label dentro do painel.
+				this.textFields.put(key, textField);
+				this.add(textField);
+				this.add(label);
+				 
+				if ((operation != CrudOperation.Create && operation != CrudOperation.Update) && key != "id") {
+					textField.hide();
+				}
+				
+				yPosition = yPosition + 50;
+			}
+		
+			//Adicionadas caixas de texto e labels da classe, o botão referente à operação é adicionado à janela.
+			mainButton.setBounds(250, yPosition, 100, 30);
+			this.add(mainButton);
+			this.mainButton.addActionListener(this);//Adiciona um listener para o botão - ao clicar no botão executará tal função (especificada abaixo).   
+	
+			//Se a operação é UPDATE, adiciona à janela um segundo botão chamado GET.
+			if(operation == CrudOperation.Update) {
+				secondaryButton = new JButton("Get");
+				secondaryButton.setBounds(100, yPosition, 80, 30);
+				this.add(secondaryButton);
+				this.secondaryButton.addActionListener(this);
+				this.mainButton.setEnabled(false);
+			}
 		}
-
 	}
 
 	//Metodo que trata quando um botão é acionado.
@@ -100,6 +138,9 @@ public class CrudOperationJPanel extends JPanel implements ActionListener {
 				break;
 			case Read:
 				this.read();
+				break;
+			case ListAll:
+				this.listAll();
 				break;
 			case Update:
 				this.update();
@@ -211,6 +252,42 @@ public class CrudOperationJPanel extends JPanel implements ActionListener {
 		}
 		
 		return true;
+	}
+	
+	public boolean listAll() {
+		try {
+			String id = "";
+			for (Map.Entry<String, JTextField> entry : this.textFields.entrySet()) {
+				String key = entry.getKey();
+				if (key == "id") {
+					JTextField idTextField = entry.getValue();
+					id = idTextField.getText();
+					object.setId(Integer.parseInt(id));
+					break;
+				}
+			}
+
+			TableObject readObject = connection.readObject(object, Integer.parseInt(id));
+			
+			Map<String, Object> objectProperties = readObject.convertToDict();
+			
+			for (Map.Entry<String, JTextField> entry : this.textFields.entrySet()) {
+				String objectProperty = objectProperties.get(entry.getKey()).toString();
+				JTextField textField = entry.getValue();
+				textField.setText(objectProperty);
+				textField.show();
+			}
+			
+		} catch (NullPointerException e) {
+			showMessage("Objeto nao encontrado");
+			return false;
+		
+		} catch (Exception e) {
+			showMessage(e.toString());
+			return false;
+		}
+		return true;
+
 	}
 
 	public void update() {

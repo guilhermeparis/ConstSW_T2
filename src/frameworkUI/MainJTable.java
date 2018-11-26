@@ -58,5 +58,3 @@ public class MainJTable extends JFrame {
 	    this.show();
 	}
 }
-		
-	

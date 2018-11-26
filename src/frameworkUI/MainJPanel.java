@@ -80,7 +80,7 @@ public class MainJPanel extends JPanel implements ActionListener {
     } else if (e.getSource()==this.readButton) {
     		new CrudOperationJFrame(CrudOperation.Read, selectedObject, connection);
     } else if (e.getSource()==this.listAllButton) {
-    		new MainJTable();
+    		new CrudOperationJFrame(CrudOperation.ListAll, selectedObject, connection);
     } else if (e.getSource()==this.updateButton) {
     		new CrudOperationJFrame(CrudOperation.Update, selectedObject, connection);
     } else if (e.getSource()==this.deleteButton){

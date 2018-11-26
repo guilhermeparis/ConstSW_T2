@@ -37,8 +37,7 @@ public abstract class SqlConnection implements DatabaseConnection {
 	@Override
 	public TableObject readObject(TableObject table, int id) throws SQLException {
 
-		String sql = "SELECT * FROM " + table.getClass().getSimpleName()
-				+ " WHERE ID = " + id + ";";
+		String sql = "SELECT * FROM " + table.getClass().getSimpleName() + " WHERE ID = " + id + ";";
 
 		Statement stmt;
 		ResultSetMetaData rsmd;
@@ -63,10 +62,32 @@ public abstract class SqlConnection implements DatabaseConnection {
 		return table;
 
 	}
-	
-	public boolean listAllObjects() throws SQLException {
-		
-		return true;
+
+	@Override
+	public TableObject listAllObject(TableObject table, int id) throws SQLException {
+		String sql = "SELECT * FROM " + table.getClass().getSimpleName() + " WHERE ID = " + id + ";";
+
+		Statement stmt;
+		ResultSetMetaData rsmd;
+		ResultSet result;
+
+		stmt = conn.createStatement();
+		result = stmt.executeQuery(sql);
+
+		rsmd = result.getMetaData();
+
+		table.setId(id);
+		Map<String, Object> dict = new HashMap<String, Object>();
+
+		while (result.next()) {
+			for (int i = 1; i <= rsmd.getColumnCount(); ++i) {
+				dict.put(rsmd.getColumnName(i), result.getObject(i));
+			}
+		}
+
+		table.setProperties(dict);
+
+		return table;
 	}
 
 	@Override
